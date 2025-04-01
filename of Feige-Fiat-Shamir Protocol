@@ -1,4 +1,4 @@
-//EXP 1 - of Feige-Fiat-Shamir Protocol
+//EXP 1 - Feige-Fiat-Shamir Protocol
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
