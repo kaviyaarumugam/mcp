@@ -1,0 +1,35 @@
+//EXP 1 - of Feige-Fiat-Shamir Protocol
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
+public class FFS {
+    static final SecureRandom r = new SecureRandom();
+
+    static BigInteger prime(int bits) {
+        return BigInteger.probablePrime(bits, r);
+    }
+
+    static BigInteger[] setup(int bits) {
+        BigInteger n = prime(bits).multiply(prime(bits));
+        BigInteger s = new BigInteger(bits, r).mod(n);
+        return new BigInteger[]{n, s, s.modPow(BigInteger.TWO, n)};
+    }
+
+    static void identify(BigInteger n, BigInteger s, BigInteger v) {
+        BigInteger r0 = new BigInteger(n.bitLength(), r).mod(n), x = r0.pow(2).mod(n);
+        int e = r.nextInt(2);
+        BigInteger y = (e == 0) ? r0 : r0.multiply(s).mod(n);
+
+        System.out.println("Public: n=" + n + ", v=" + v);
+        System.out.println("Secret: s=" + s);
+        System.out.println("x=" + x + ", e=" + e + ", y=" + y);
+        System.out.println((y.pow(2).mod(n).equals((e == 0) ? x : x.multiply(v).mod(n))) ?
+                "Verifier accepts" : "Verifier rejects");
+    }
+
+    public static void main(String[] args) {
+        BigInteger[] p = setup(64);
+        identify(p[0], p[1], p[2]);
+    }
+}
